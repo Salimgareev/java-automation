@@ -6,13 +6,10 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 public class HomePage extends BasePage{
-    @FindBy(xpath = "//a[contains(text(),'Песочница')]")
-    private WebElement sandboxList;
-
     @FindBy(xpath = "//li[contains(@class,'nav-item')]/a[@role or @aria-expanded]")
     private List<WebElement> listBaseMenu;
 
-    @FindBy(xpath = "//a[@data-cga_click_top_menu]")
+    @FindBy(xpath = "//a[@class = 'dropdown-item']")
     private List<WebElement> listSubMenu;
 
 
@@ -26,7 +23,7 @@ public class HomePage extends BasePage{
         for (WebElement menuItem : listBaseMenu) {
             if (menuItem.getText().trim().equalsIgnoreCase(nameBaseMenu)) {
                 waitUtilElementToBeClickable(menuItem).click();
-                System.out.println("Найдено: " + menuItem.getText().trim());
+                System.out.println("Найдено меню: " + menuItem.getText().trim());
                 return this;
             }
         }
@@ -38,16 +35,16 @@ public class HomePage extends BasePage{
      * Функция клика на любое подменю
      *
      * @param nameSubMenu - наименование подменю
-     * @return InsurancePage - т.е. переходим на страницу {@link InsurancePage}
+     * @return ProductsPage - т.е. переходим на страницу {@link ProductsPage}
      */
-//    public InsurancePage selectSubMenu(String nameSubMenu) {
-//        for (WebElement menuItem : listSubMenu) {
-//            if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {
-//                waitUtilElementToBeClickable(menuItem).click();
-//                return pageManager.getInsurancePage().checkOpenInsurancePage();
-//            }
-//        }
-//        Assertions.fail("Подменю '" + nameSubMenu + "' не было найдено на стартовой странице!");
-//        return pageManager.getInsurancePage();
-//    }
+    public ProductsPage selectSubMenu(String nameSubMenu) {
+        for (WebElement menuItem : listSubMenu) {
+            if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {
+                waitUtilElementToBeClickable(menuItem).click();
+                return pageManager.getProductsPage();
+            }
+        }
+        Assertions.fail("Подменю '" + nameSubMenu + "' не было найдено на стартовой странице!");
+        return pageManager.getProductsPage();
+    }
 }
