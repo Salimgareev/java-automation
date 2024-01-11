@@ -9,6 +9,9 @@ public class FirstTest extends BaseTests {
         app.getHomePage()
                 .selectBaseMenu("Песочница")
                 .selectSubMenu("Товары")
-                .checkOpenProductsPage();  // Проверяем, что страница с товарами открылась
+                .checkOpenProductsPage()  // Проверяем, что страница с товарами открылась
+                .checkAvailabilityHeadings("Наименование")
+                .checkAvailabilityHeadings("Тип")
+                .checkAvailabilityHeadings("Экзотический");
     }
 }
