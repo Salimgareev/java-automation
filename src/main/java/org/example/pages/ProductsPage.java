@@ -11,7 +11,7 @@ public class ProductsPage extends BasePage{
     /**
      * Проверка открытия страницы, путём проверки title страницы
      *
-     * @return InsurancePage - т.е. остаемся на этой странице
+     * @return ProductsPage - т.е. остаемся на этой странице
      */
     public ProductsPage checkOpenProductsPage() {
         Assertions.assertEquals("Список товаров",
