@@ -26,8 +26,14 @@ public class ProductsPage extends BasePage{
     @FindBy(xpath = "//form[@id = 'editForm']/*/select[@id = 'type']")
     private WebElement dialogSelectType;
 
-    @FindBy(xpath = "//form[@id = 'editForm']/*/input[@id = 'exotic']")
-    private WebElement dialogCheckBoxExotic;
+    @FindBy(xpath = "//form[@id = 'editForm']/*/select[@id = 'type']/*")
+    private List<WebElement> listSelectTypeSubMenu;
+
+    @FindBy(xpath = "//form[@id = 'editForm']/*/input[@id = 'exotic']/../*")
+    private List<WebElement> dialogCheckBoxExotic;
+
+    @FindBy(id = "save")
+    private WebElement btnSave;
 
     /**
      * Проверка открытия страницы, путём проверки title страницы
@@ -59,11 +65,24 @@ public class ProductsPage extends BasePage{
     }
 
     /**
+     * Проверка наличия кнопки с опр текстом
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkBtn(String btnText){
+        waitUtilElementToBeClickable(btnSave);
+        Assertions.assertEquals(btnText, btnSave.getText(),
+                "Текст кнопки сохранить не соответствует ожидаемому");
+        return this;
+    }
+
+
+    /**
      * Проверка наличия кнопки соответствующего цвета
      *
      * @return ProductsPage - т.е. остаемся на этой странице
      */
-    public ProductsPage checkBtn(String color){
+    public ProductsPage checkBtnColor(String color){
         String colorBtn = btnAdd.getCssValue("background-color");
         Assertions.assertEquals(color, colorBtn, "Цвет кнопки не соответствует переданному цвету");
         System.out.println("Цвет кнопки: " + colorBtn);
@@ -81,17 +100,99 @@ public class ProductsPage extends BasePage{
     }
 
     /**
+     * Клик по кнопке "Сохранить"
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage clickBtnSave() {
+        waitUtilElementToBeClickable(btnSave).click();
+        return this;
+    }
+
+    /**
+     * Проверка поля ввода
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkField(String text){
+        fillInputField(dialogFieldName, text);
+        Assertions.assertEquals(text, dialogFieldName.getAttribute("value"),
+                "Значение поля не соответствует введенному");
+        System.out.println("Полученный текст из поля ввода: " +  dialogFieldName.getAttribute("value"));
+        return this;
+    }
+
+    /**
+     * Функция клика на любое подменю выпадающего списка в окне добавления товара
+     *
+     * @param nameSubMenu - наименование подменю
+     * @return ProductsPage - т.е. переходим на страницу {@link ProductsPage}
+     */
+    public ProductsPage selectSubMenuSelect(String nameSubMenu) {
+        for (WebElement menuItem : listSelectTypeSubMenu) {
+            if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {
+                waitUtilElementToBeClickable(menuItem).click();
+                return this;
+            }
+        }
+        Assertions.fail("Подменю '" + nameSubMenu + "' не было найдено в окне добавления товара!");
+        return this;
+    }
+
+    /**
+     * Проверка, что в выпадающем списке выбрано именно нужное значение
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkTypeSelected(String selectedValue){
+        Assertions.assertEquals(selectedValue, dialogSelectType.getAttribute("value"),
+                "Значение не соответствует выбранному");
+        System.out.println("В списке выбрано значение: " + dialogSelectType.getAttribute("value"));
+        return this;
+    }
+
+    /**
+     * Проверка, поставлена ли галочка на чекбокс
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkCheckboxSelected(WebElement element, boolean isSelected){
+        Assertions.assertEquals(isSelected, element.isSelected(),
+                "Чекбокс либо выбран, либо наоборот не выбран");
+        return this;
+    }
+
+    /**
      * Проверка модального окна добавления нового товара в таблицу
      *
      * @return ProductsPage - т.е. остаемся на этой странице
      */
-    public ProductsPage checkDialog (String header){
+    public ProductsPage checkDialog (String header, String checkboxId,
+                                     String checkboxType, String textCheckbox, boolean checkboxIsSelected){
         waitUtilElementToBeVisible(dialogHeader);
         Assertions.assertEquals(header, dialogHeader.getText(), "Не найден заголовок окна добавления товара");
         System.out.println("Заголовок окна добавления товара: " + dialogHeader.getText());
-        waitUtilElementToBeClickable(dialogFieldName);
+
         waitUtilElementToBeVisible(dialogSelectType);
-        waitUtilElementToBeVisible(dialogCheckBoxExotic);
+
+        WebElement btnCheck = null; // Хранение самой кнопки чекбокса
+        for (WebElement checkbox: dialogCheckBoxExotic) {
+            if (checkbox.getAttribute("id").equals(checkboxId)
+                    && checkbox.getAttribute("type").equals(checkboxType)){
+                System.out.println("id = " + checkbox.getAttribute("id")
+                        + ", type = " + checkbox.getAttribute("type"));
+                btnCheck = checkbox;    // Если нашли, присвоить нашей переменной
+            } else if (checkbox.getText().equals(textCheckbox)){
+                System.out.println("Текст чекбокса: " + checkbox.getText());
+            } else {
+                Assertions.fail("Чекбокс не совпадает либо не существует с такими атрибутами или " +
+                        "Текст чекбокса не совпадает со словом Экзотический");
+            }
+        }
+        waitUtilElementToBeClickable(dialogSelectType).click();
+
+        checkCheckboxSelected(btnCheck, checkboxIsSelected);
+
         return this;
     }
 
