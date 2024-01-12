@@ -115,6 +115,16 @@ public class ProductsPage extends BasePage{
     }
 
     /**
+     * Клик по чекбоксу
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    private ProductsPage clickBtnExotic(WebElement element){
+        waitUtilElementToBeClickable(element).click();
+        return this;
+    }
+
+    /**
      * Проверка поля ввода
      *
      * @return ProductsPage - т.е. остаемся на этой странице
@@ -195,6 +205,11 @@ public class ProductsPage extends BasePage{
             }
         }
         waitUtilElementToBeClickable(dialogSelectType).click();
+
+        // Если мы передали true вызови метод, который кликает по чекбоксу
+        if (checkboxIsSelected == true){
+            clickBtnExotic(btnCheck);
+        }
 
         checkCheckboxSelected(btnCheck, checkboxIsSelected);
 
