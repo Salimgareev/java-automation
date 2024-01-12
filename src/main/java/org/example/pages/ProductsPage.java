@@ -5,7 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.nio.file.WatchEvent;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ProductsPage extends BasePage{
     @FindBy(xpath = "//h5[contains(text(),'Список товаров')]")
@@ -34,6 +36,9 @@ public class ProductsPage extends BasePage{
 
     @FindBy(id = "save")
     private WebElement btnSave;
+
+    @FindBy(xpath = "//table[@class = 'table']/tbody/*")
+    private List<WebElement> listRowsTable;
 
     /**
      * Проверка открытия страницы, путём проверки title страницы
@@ -192,6 +197,56 @@ public class ProductsPage extends BasePage{
         waitUtilElementToBeClickable(dialogSelectType).click();
 
         checkCheckboxSelected(btnCheck, checkboxIsSelected);
+
+        return this;
+    }
+
+    /**
+     * Проверка, что окно создания товара закрылось успешно
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkWindowClosed(){
+        try {
+            if (dialogHeader.isDisplayed()){
+                Assertions.fail("Окно не закрыто!");
+            }
+        }
+        catch(Exception n) {
+            System.out.println("Элемент невидимый - окно закрыто");
+        }
+
+        return this;
+    }
+
+    /**
+     * Проверка, что в таблицу добавился новый товар
+     *
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage checkNewAddToTable(String name, String type, boolean isExotic){
+        System.out.println("Размер таблицы товаров: " + listRowsTable.size());
+
+        WebElement rowTable = listRowsTable.get(listRowsTable.size() - 1);
+        List<String> elementsOfRowListExpected = Arrays.asList(name, type, String.valueOf(isExotic));
+        boolean allEqual = true;
+
+        String strWithOutId = rowTable.getText().substring(2);
+//        System.out.println(strWithOutId);
+
+        List<String> elementsOfRowList = Arrays.asList(strWithOutId.split(" ", -1));
+
+        for (int i = 0; i < elementsOfRowList.size(); i++) {
+            if (!elementsOfRowList.get(i).equals(elementsOfRowListExpected.get(i))) {
+                allEqual = false;
+                break;
+            }
+        }
+        if (!allEqual){
+            Assertions.fail("Элементы не совпадают!" +
+                    "\nСами элементы:\t\t" + strWithOutId +
+                    "\nПереданная строка:\t" + String.join(" ", elementsOfRowListExpected));
+        }
 
         return this;
     }
