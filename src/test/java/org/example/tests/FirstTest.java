@@ -21,6 +21,8 @@ public class FirstTest extends BaseTests {
                 .selectSubMenuSelect("Овощ")
                 .checkTypeSelected("VEGETABLE")
                 .checkBtn("Сохранить")
-                .clickBtnSave();
+                .clickBtnSave()
+                .checkWindowClosed()
+                .checkNewAddToTable("йцю123qw!@#$%^&*()_+/\\|", "Овощ", false);
     }
 }
