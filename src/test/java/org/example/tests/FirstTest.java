@@ -1,11 +1,16 @@
 package org.example.tests;
 
 import org.example.basetestsclass.BaseTests;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class FirstTest extends BaseTests {
-    @Test
-    public void startTest() {
+    @ParameterizedTest
+    @CsvSource({
+            "false, йцю123qw!@#$%^&*()_+/\\|, Овощ, VEGETABLE",
+            "true, Ананас, Фрукт, FRUIT"
+    })
+    public void startTest(boolean checkboxIsSelected, String text, String nameMenuWindow, String selectedValue) {
         app.getHomePage()
                 .selectBaseMenu("Песочница")
                 .selectSubMenu("Товары")
@@ -16,13 +21,13 @@ public class FirstTest extends BaseTests {
                 .checkBtnColor("rgba(0, 123, 255, 1)")
                 .clickBtnAdd()
                 .checkDialog("Добавление товара", "exotic", "checkbox",
-                        "Экзотический", false)
-                .checkField("йцю123qw!@#$%^&*()_+/\\|")
-                .selectSubMenuSelect("Овощ")
-                .checkTypeSelected("VEGETABLE")
+                        "Экзотический", checkboxIsSelected)
+                .checkField(text)
+                .selectSubMenuSelect(nameMenuWindow)
+                .checkTypeSelected(selectedValue)
                 .checkBtn("Сохранить")
                 .clickBtnSave()
                 .checkWindowClosed()
-                .checkNewAddToTable("йцю123qw!@#$%^&*()_+/\\|", "Овощ", false);
+                .checkNewAddToTable(text, nameMenuWindow, checkboxIsSelected);
     }
 }
