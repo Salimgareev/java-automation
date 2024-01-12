@@ -13,8 +13,14 @@ public class FirstTest extends BaseTests {
                 .checkAvailabilityHeadings("Наименование")
                 .checkAvailabilityHeadings("Тип")
                 .checkAvailabilityHeadings("Экзотический")
-                .checkBtn("rgba(0, 123, 255, 1)")
+                .checkBtnColor("rgba(0, 123, 255, 1)")
                 .clickBtnAdd()
-                .checkDialog("Добавление товара");
+                .checkDialog("Добавление товара", "exotic", "checkbox",
+                        "Экзотический", false)
+                .checkField("йцю123qw!@#$%^&*()_+/\\|")
+                .selectSubMenuSelect("Овощ")
+                .checkTypeSelected("VEGETABLE")
+                .checkBtn("Сохранить")
+                .clickBtnSave();
     }
 }
