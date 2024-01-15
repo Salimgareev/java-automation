@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.nio.file.WatchEvent;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class ProductsPage extends BasePage{
     @FindBy(xpath = "//h5[contains(text(),'Список товаров')]")
@@ -39,6 +37,12 @@ public class ProductsPage extends BasePage{
 
     @FindBy(xpath = "//table[@class = 'table']/tbody/*")
     private List<WebElement> listRowsTable;
+
+    @FindBy(xpath = "//li[contains(@class,'nav-item')]/a[@role or @aria-expanded]")
+    private List<WebElement> listBaseMenu;
+
+    @FindBy(xpath = "//a[@class = 'dropdown-item']")
+    private List<WebElement> listSubMenu;
 
     /**
      * Проверка открытия страницы, путём проверки title страницы
@@ -222,14 +226,9 @@ public class ProductsPage extends BasePage{
      * @return ProductsPage - т.е. остаемся на этой странице
      */
     public ProductsPage checkWindowClosed(){
-        try {
-            if (dialogHeader.isDisplayed()){
-                Assertions.fail("Окно не закрыто!");
-            }
-        }
-        catch(Exception n) {
-            System.out.println("Элемент невидимый - окно закрыто");
-        }
+        boolean isInvisible = waitUtilElementToBeInvisible(dialogHeader);
+        System.out.println("Окно закрыто: " + isInvisible);
+        Assertions.assertTrue(isInvisible, "Окно не закрыто!");
 
         return this;
     }
@@ -247,7 +246,6 @@ public class ProductsPage extends BasePage{
         boolean allEqual = true;
 
         String strWithOutId = rowTable.getText().substring(2);
-//        System.out.println(strWithOutId);
 
         List<String> elementsOfRowList = Arrays.asList(strWithOutId.split(" ", -1));
 
@@ -263,6 +261,41 @@ public class ProductsPage extends BasePage{
                     "\nПереданная строка:\t" + String.join(" ", elementsOfRowListExpected));
         }
 
+        return this;
+    }
+
+    /**
+     * Функция наведения мыши на любой пункт меню
+     *
+     * @param nameBaseMenu - наименование меню
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage selectBaseMenuProductsPage(String nameBaseMenu) {
+        for (WebElement menuItem : listBaseMenu) {
+            if (menuItem.getText().trim().equalsIgnoreCase(nameBaseMenu)) {
+                waitUtilElementToBeClickable(menuItem).click();
+                System.out.println("Найдено меню: " + menuItem.getText().trim());
+                return this;
+            }
+        }
+        Assertions.fail("Меню '" + nameBaseMenu + "' не было найдено на странице товаров!");
+        return this;
+    }
+
+    /**
+     * Функция клика на любое подменю
+     *
+     * @param nameSubMenu - наименование подменю
+     * @return ProductsPage - т.е. остаемся на этой странице
+     */
+    public ProductsPage selectSubMenuProductsPage(String nameSubMenu) {
+        for (WebElement menuItem : listSubMenu) {
+            if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {
+                waitUtilElementToBeClickable(menuItem).click();
+                return this;
+            }
+        }
+        Assertions.fail("Подменю '" + nameSubMenu + "' не было найдено на странице товаров!");
         return this;
     }
 
