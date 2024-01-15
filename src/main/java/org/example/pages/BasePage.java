@@ -102,7 +102,7 @@ public class BasePage {
     }
 
     /**
-     * Явное ожидание того что элемент станет видимым
+     * Явное ожидание того, что элемент станет видимым
      *
      * @param element - веб элемент который мы ожидаем что будет  виден на странице
      */
@@ -110,9 +110,17 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    /**
+     * Явное ожидание того, что элемент станет невидимым
+     *
+     * @param element - веб элемент, который мы ожидаем, что будет не виден на странице
+     */
+    protected Boolean waitUtilElementToBeInvisible(WebElement element) {
+        return wait.until(ExpectedConditions.invisibilityOf(element));
+    }
 
     /**
-     * Общий метод по заполнения полей ввода
+     * Общий метод по заполнению полей ввода
      *
      * @param field - веб-элемент поле ввода
      * @param value - значение вводимое в поле
