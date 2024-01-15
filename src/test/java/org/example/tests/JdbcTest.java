@@ -21,7 +21,7 @@ public class JdbcTest extends BaseJdbcTests {
         String foodType = "VEGETABLE";
         int foodExotic = 0;
 
-        addDataToTable(foodId, foodName, foodType, foodExotic);
+        addDataToTable(nameTable, foodId, foodName, foodType, foodExotic);
         checkDataLastAddRowInTable(nameTable, foodId, foodName, foodType, foodExotic);
         deleteRowFromTable(foodId, nameTable);
     }
@@ -29,7 +29,8 @@ public class JdbcTest extends BaseJdbcTests {
     /**
      * Получает ResultSet по имени таблицы
      *
-     * @return resultSet - т.е. ResultSet
+     * @param nameTable Имя таблицы
+     * @return resultSet - т.е. ResultSet, в котором будут все строки таблицы
      */
     private ResultSet getResultSet(String nameTable) throws SQLException {
         String sql = "SELECT * FROM " + nameTable + ";";
@@ -39,7 +40,7 @@ public class JdbcTest extends BaseJdbcTests {
     /**
      * Получает определенную строку по имени таблицы и id строки
      *
-     * @return resultSet - т.е. ResultSet
+     * @return resultSet - т.е. ResultSet, в котором будет строка таблицы
      */
     private ResultSet getResultSetRow(String nameTable, int id) throws SQLException {
         String sql = "SELECT * FROM " + nameTable + " WHERE FOOD_ID = " + id + ";";
@@ -62,8 +63,8 @@ public class JdbcTest extends BaseJdbcTests {
     /**
      * Добавить данные в таблицу
      */
-    private void addDataToTable(int id, String name, String type, int exotic) throws SQLException {
-        String insert = "INSERT INTO FOOD VALUES (?, ?, ?, ?);";
+    private void addDataToTable(String nameTable, int id, String name, String type, int exotic) throws SQLException {
+        String insert = "INSERT INTO " + nameTable + " VALUES (?, ?, ?, ?);";
         PreparedStatement ps = getConnection().prepareStatement(insert);
         ps.setInt(1, id);
         ps.setString(2, name);
