@@ -28,6 +28,8 @@ public class FirstTest extends BaseTests {
                 .checkBtn("Сохранить")
                 .clickBtnSave()
                 .checkWindowClosed()
-                .checkNewAddToTable(text, nameMenuWindow, checkboxIsSelected);
+                .checkNewAddToTable(text, nameMenuWindow, checkboxIsSelected)
+                .selectBaseMenuProductsPage("Песочница")
+                .selectSubMenuProductsPage("Сброс данных");
     }
 }
