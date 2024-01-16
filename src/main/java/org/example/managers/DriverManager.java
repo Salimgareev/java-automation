@@ -16,12 +16,10 @@ public class DriverManager {
      */
     private WebDriver driver;
 
-
     /**
      * Переменна для хранения объекта DriverManager
      */
     private static DriverManager INSTANCE = null;
-
 
     /**
      * Менеджер properties
@@ -29,7 +27,6 @@ public class DriverManager {
      * @see TestPropManager#getTestPropManager()
      */
     private final TestPropManager props = TestPropManager.getTestPropManager();
-
 
     /**
      * Конструктор специально был объявлен как private (singleton паттерн)
@@ -63,7 +60,6 @@ public class DriverManager {
         return driver;
     }
 
-
     /**
      * Метод для закрытия сессии драйвера и браузера
      *
@@ -75,7 +71,6 @@ public class DriverManager {
             driver = null;
         }
     }
-
 
     /**
      * Метод инициализирующий веб драйвер
@@ -92,9 +87,6 @@ public class DriverManager {
     private void initDriverWindowsOsFamily() {
         initDriverAnyOsFamily(PATH_GECKO_DRIVER_WINDOWS, PATH_CHROME_DRIVER_WINDOWS);
     }
-
-
-
 
     /**
      * Метод инициализирующий веб драйвер под любую ОС
