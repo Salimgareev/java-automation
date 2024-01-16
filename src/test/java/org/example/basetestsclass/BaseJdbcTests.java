@@ -9,29 +9,29 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseJdbcTests {
-    private static Connection connection;
+//    private static Connection connection;
+//
+//    public static Connection getConnection() {
+//        return connection;
+//    }
 
-    public static Connection getConnection() {
-        return connection;
-    }
+//    private Connection getNewConnection() throws SQLException {
+//        String url = "jdbc:h2:tcp://localhost:9092/mem:testdb";
+//        String user = "user";
+//        String passwd = "pass";
+//        return DriverManager.getConnection(url, user, passwd);
+//    }
 
-    private Connection getNewConnection() throws SQLException {
-        String url = "jdbc:h2:tcp://localhost:9092/mem:testdb";
-        String user = "user";
-        String passwd = "pass";
-        return DriverManager.getConnection(url, user, passwd);
-    }
+//    public static Statement getStatement() throws SQLException {
+//        return connection.createStatement();
+//    }
 
-    public static Statement getStatement() throws SQLException {
-        return connection.createStatement();
-    }
-
-    @BeforeEach
-    public void init() throws SQLException {
-        connection = getNewConnection();
-    }
-    @AfterEach
-    public void close() throws SQLException {
-        connection.close();
-    }
+//    @BeforeEach
+//    public void init() throws SQLException {
+//        connection = getNewConnection();
+//    }
+//    @AfterEach
+//    public void close() throws SQLException {
+//        connection.close();
+//    }
 }
