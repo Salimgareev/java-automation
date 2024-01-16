@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import io.cucumber.java.bg.И;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,6 +20,7 @@ public class HomePage extends BasePage{
      * @param nameBaseMenu - наименование меню
      * @return HomePage - т.е. остаемся на этой странице
      */
+    @И("нажать на меню {string}")
     public HomePage selectBaseMenu(String nameBaseMenu) {
         for (WebElement menuItem : listBaseMenu) {
             if (menuItem.getText().trim().equalsIgnoreCase(nameBaseMenu)) {
@@ -37,6 +39,7 @@ public class HomePage extends BasePage{
      * @param nameSubMenu - наименование подменю
      * @return ProductsPage - т.е. переходим на страницу {@link ProductsPage}
      */
+    @И("выбрать в нем {string}")
     public ProductsPage selectSubMenu(String nameSubMenu) {
         for (WebElement menuItem : listSubMenu) {
             if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {
