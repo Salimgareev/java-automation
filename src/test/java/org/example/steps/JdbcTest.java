@@ -1,4 +1,4 @@
-package org.example.tests;
+package org.example.steps;
 
 import org.example.basetestsclass.BaseJdbcTests;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-public class JdbcTest extends BaseJdbcTests {
+public class JdbcTest {
     @Test
     public void jdbcTest() throws SQLException {
         String nameTable = "FOOD";
@@ -34,7 +34,7 @@ public class JdbcTest extends BaseJdbcTests {
      */
     private ResultSet getResultSet(String nameTable) throws SQLException {
         String sql = "SELECT * FROM " + nameTable + ";";
-        return getStatement().executeQuery(sql);
+        return Hooks.getStatement().executeQuery(sql);
     }
 
     /**
@@ -44,7 +44,7 @@ public class JdbcTest extends BaseJdbcTests {
      */
     private ResultSet getResultSetRow(String nameTable, int id) throws SQLException {
         String sql = "SELECT * FROM " + nameTable + " WHERE FOOD_ID = " + id + ";";
-        return getStatement().executeQuery(sql);
+        return Hooks.getStatement().executeQuery(sql);
     }
     /**
      * Ищет кол-во строк в таблице по имени
@@ -65,7 +65,7 @@ public class JdbcTest extends BaseJdbcTests {
      */
     private void addDataToTable(String nameTable, int id, String name, String type, int exotic) throws SQLException {
         String insert = "INSERT INTO " + nameTable + " VALUES (?, ?, ?, ?);";
-        PreparedStatement ps = getConnection().prepareStatement(insert);
+        PreparedStatement ps = Hooks.getConnection().prepareStatement(insert);
         ps.setInt(1, id);
         ps.setString(2, name);
         ps.setString(3, type);
@@ -104,7 +104,7 @@ public class JdbcTest extends BaseJdbcTests {
      */
     private void deleteRowFromTable(int rowId, String nameTable) throws SQLException {
         String sql = "DELETE FROM " + nameTable + " WHERE FOOD_ID = " + rowId + ";";
-        getStatement().executeUpdate(sql);
+        Hooks.getStatement().executeUpdate(sql);
         int countRowsAfterDelete = findCountRowsTable(nameTable);
         Assertions.assertEquals(rowId - 1, countRowsAfterDelete,
                 "Удаление выполнено некорректно! Кол-во строк после удаления " +
