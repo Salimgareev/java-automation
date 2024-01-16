@@ -11,31 +11,31 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.example.utils.PropConst.BASE_URL;
 
 public class BaseTests {
-    /**
-     * Менеджер страничек
-     * @see PageManager#getPageManager()
-     */
-    protected PageManager app = PageManager.getPageManager();
-
-    /**
-     * Менеджер WebDriver
-     *
-     * @see DriverManager#getDriverManager()
-     */
-    private final DriverManager driverManager = DriverManager.getDriverManager();
-
-    @BeforeAll
-    public static void beforeAll() {
-        InitManager.initFramework();
-    }
-
-    @BeforeEach
-    public void beforeEach() {
-        driverManager.getDriver().get(TestPropManager.getTestPropManager().getProperty(BASE_URL));
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        InitManager.quitFramework();
-    }
+//    /**
+//     * Менеджер страничек
+//     * @see PageManager#getPageManager()
+//     */
+//    protected PageManager app = PageManager.getPageManager();
+//
+//    /**
+//     * Менеджер WebDriver
+//     *
+//     * @see DriverManager#getDriverManager()
+//     */
+//    private final DriverManager driverManager = DriverManager.getDriverManager();
+//
+//    @BeforeAll
+//    public static void beforeAll() {
+//        InitManager.initFramework();
+//    }
+//
+//    @BeforeEach
+//    public void beforeEach() {
+//        driverManager.getDriver().get(TestPropManager.getTestPropManager().getProperty(BASE_URL));
+//    }
+//
+//    @AfterAll
+//    public static void afterAll() {
+//        InitManager.quitFramework();
+//    }
 }
