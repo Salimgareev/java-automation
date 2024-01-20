@@ -48,7 +48,7 @@ public class Hooks {
     }
 
     private Connection getNewConnection() throws SQLException {
-        String url = "jdbc:h2:tcp://localhost:9092/mem:testdb";
+        String url = driverManager.getDataBaseURL();
         String user = "user";
         String passwd = "pass";
         return java.sql.DriverManager.getConnection(url, user, passwd);
