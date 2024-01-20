@@ -109,7 +109,15 @@ public class DriverManager {
     private void initRemoteDriver() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setBrowserName(props.getProperty(TYPE_BROWSER));
-        capabilities.setVersion("109.0");
+
+        String browserType = System.getProperty("type.browser").toLowerCase();
+
+        if (browserType.equals("opera")) {
+            capabilities.setVersion("94.0");
+        } else {
+            capabilities.setVersion("109.0");
+        }
+
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", false
