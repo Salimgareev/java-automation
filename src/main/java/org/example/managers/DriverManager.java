@@ -5,6 +5,12 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.Map;
 
 import static org.example.utils.PropConst.*;
 
@@ -34,6 +40,10 @@ public class DriverManager {
      * @see DriverManager#getDriverManager()
      */
     private DriverManager() {
+    }
+
+    public String getDataBaseURL(){
+        return props.getProperty(DATABASE_URL);
     }
 
     /**
@@ -76,8 +86,38 @@ public class DriverManager {
      * Метод инициализирующий веб драйвер
      */
     private void initDriver() {
-        if (OS.isFamilyWindows()) {
-            initDriverWindowsOsFamily();
+        String driverType = props.getProperty(TYPE_DRIVER).toLowerCase();
+
+        switch (driverType) {
+            case "remote":
+                initRemoteDriver();
+                break;
+            case "local":
+                if (OS.isFamilyWindows()) {
+                    initDriverWindowsOsFamily();
+                }
+                break;
+            default:
+                Assertions.fail("Такого типа драйвера '" + props.getProperty(TYPE_DRIVER) + "' не существует");
+                break;
+        }
+    }
+
+    /**
+     * Метод инициализирующий удаленный веб драйвер
+     */
+    private void initRemoteDriver() {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName(props.getProperty(TYPE_BROWSER));
+        capabilities.setVersion("109.0");
+        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+                "enableVNC", true,
+                "enableVideo", false
+        ));
+        try {
+            driver = new RemoteWebDriver(URI.create(props.getProperty(SELENOID_URL)).toURL(), capabilities);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
     }
 
